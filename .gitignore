@@ -148,3 +148,4 @@ data/
 cache/
 
 staticfiles/
+node_modules/
