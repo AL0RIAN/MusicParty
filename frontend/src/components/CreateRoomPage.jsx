@@ -9,12 +9,17 @@ import Radio from "@mui/material/Radio"
 import { Link } from "react-router-dom"
 import { RadioGroup } from "@mui/material"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
+import axios from "axios"
+
+axios.defaults.withCredentials = true;
 
 export default function CreateRoomPage(props) {
     let defaultVotes = 2;
     const [votesToSkip, setVotesToSkip] = useState(defaultVotes);
     const [guestCanPause, setGuestCanPause] = useState(true);
     const [example, setExample] = useState("{}");
+    const navigate = useNavigate();
 
     function handleVotesChange(e) {
         setVotesToSkip(e.target.value);
@@ -25,21 +30,24 @@ export default function CreateRoomPage(props) {
     }
 
     function handleCreateRoomButton() {
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                votes_to_skip: votesToSkip,
-                guest_can_pause: guestCanPause
-            })
+        const requestData = {
+            votes_to_skip: votesToSkip,
+            guest_can_pause: guestCanPause,
         };
-        
-        fetch("http://127.0.0.1:8000/api/room/create/", requestOptions)
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data)
-                setExample(JSON.stringify(data))
-            });
+    
+        axios.post('http://127.0.0.1:8000/api/room/create/', requestData, { 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true 
+        })
+        .then((response) => {
+            setExample(JSON.stringify(response.data));  
+            navigate(`/room/${response.data.code}`);
+        })
+        .catch((error) => {
+            console.error("Room creating error:", error);
+        });
     }
 
 

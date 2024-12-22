@@ -1,7 +1,7 @@
 import RoomJoinPage from "./RoomJoinPage";
 import CreateRoomPage from "./CreateRoomPage";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import App from "./App";
+import Room from "./Room";
 
 export default function HomePage() {
     return (
@@ -11,6 +11,7 @@ export default function HomePage() {
                     <Route path="/" element={<p>This is the home page</p>}/>
                     <Route path="/create" element={<CreateRoomPage />} />
                     <Route path="/join" element={<RoomJoinPage />} />
+                    <Route path="room/:roomCode" element={<Room />} />
                 </Routes>
             </BrowserRouter>
         </>
