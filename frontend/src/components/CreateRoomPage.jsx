@@ -1,16 +1,16 @@
-import Button from "@mui/material/Button"
-import Grid from "@mui/material/Grid2"
-import Typography from "@mui/material/Typography"
-import TextField from "@mui/material/TextField"
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid2";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText"
-import FormControl from "@mui/material/FormControl"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import Radio from "@mui/material/Radio"
-import { Link } from "react-router-dom"
-import { RadioGroup } from "@mui/material"
-import { useState } from "react"
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import { Link } from "react-router-dom";
+import { RadioGroup } from "@mui/material";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"
+import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
@@ -35,9 +35,9 @@ export default function CreateRoomPage(props) {
             guest_can_pause: guestCanPause,
         };
     
-        axios.post('http://127.0.0.1:8000/api/room/create/', requestData, { 
+        axios.post("http://127.0.0.1:8000/api/room/create/", requestData, { 
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
             withCredentials: true 
         })
