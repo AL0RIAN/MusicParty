@@ -27,7 +27,6 @@ export default function RoomJoinPage(props) {
             },
         })
         .then((response) => {
-            console.log(response)
             navigate(`/room/${roomCode}`);
         })
         .catch((error) => {
