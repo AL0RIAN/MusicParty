@@ -37,12 +37,12 @@ export default function RoomJoinPage(props) {
 
     return (
         <Grid container spacing={1} flexDirection={"column"} alignItems={"center"}>
-            <Grid xs={12}>
+            <Grid size={{xs: 12}}>
                 <Typography variant="h4" component="h4">
                     Join a Room
                 </Typography>
             </Grid>
-            <Grid xs={12}>
+            <Grid size={{xs: 12}}>
                 <TextField xs={12} 
                     error={true}
                     label="Code"
@@ -53,12 +53,12 @@ export default function RoomJoinPage(props) {
                     onChange={handleTextFieldChange}
                 />
             </Grid>
-            <Grid xs={12}>
+            <Grid size={{xs: 12}}>
                 <Button variant="contained" color="primary" onClick={enterRoom}>
                     Enter Room
                 </Button>
             </Grid>
-            <Grid xs={12}>
+            <Grid size={{xs: 12}}>
                 <Button variant="contained" color="secondary" to="/" component={Link}>
                     Back
                 </Button>

@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CreateRoomPage from "./CreateRoomPage";
+import MusicPlayer from "./MusicPlayer";
 
 
 export default function Room(props) {
@@ -14,9 +15,22 @@ export default function Room(props) {
     const [isHost, setIsHost] = useState(false);
     const [error, setError] = useState(null);
     const [showSetings, setShowSettings] = useState(null);
+    const [song, setSong] = useState({});
+    const [spotifyAuth, setSpotifyAuth] = useState(false);
     const navigate = useNavigate();
 
     const { roomCode } = useParams();
+
+    function getCurrentSong() {
+        axios.get('http://127.0.0.1:8000/spotify/current-song/')
+        .then((response) => {
+            if (response.status != 200) {
+                console.log(response);
+            } else {
+                setSong(response.data);
+            }
+        })
+    }
 
     function leaveRoom() {
         axios.post("http://127.0.0.1:8000/api/room/leave/", {
@@ -51,7 +65,7 @@ export default function Room(props) {
 
     function renderSettings() {
         return (
-            <Grid container spacing={1} justifyContent="center">
+            <Grid container spacing={1} justifyContent="center" alignItems="center" flexDirection="column">
                 <Grid xs={12} alignItems="center">
                     <CreateRoomPage 
                         update={true}
@@ -74,19 +88,46 @@ export default function Room(props) {
         );
     }
     
+
     const getRoomData = async () => {
-        try {
-            console.log("DEBUG")
-            const room_data = await axios.get(`http://127.0.0.1:8000/api/room/${roomCode}/`);
+        axios.get(`http://127.0.0.1:8000/api/room/${roomCode}/`)
+        .then((room_data) => {
             setRoomData(room_data.data);
-            const host_check = await axios.get(`http://127.0.0.1:8000/api/room/check_host/${room_data.data.id}/`);
-            setIsHost(host_check.data);
-        } catch (err) {
+            axios.get(`http://127.0.0.1:8000/api/room/check_host/${room_data.data.id}/`)
+            .then((host_check) => {
+                setIsHost(host_check.data);
+                if (host_check.data) {
+                    authenticated();
+                }
+            });
+        })
+        .catch((err) => {
             setError(err.room_data?.data?.error || "Error fetching room data");
             props.clearRoomCodeCallback();
             navigate("/");
-        }
+        })
     }
+
+    function authenticated() {
+        axios.get("http://127.0.0.1:8000/spotify/is-authenticated/")
+        .then((data) => {
+            setSpotifyAuth(data.is_authenticated);
+            if (!data.data.is_authenticated) {
+                axios.get("http://127.0.0.1:8000/spotify/get-auth-url/")
+                .then((response) => {
+                    window.location.href = response.data.url;
+                })
+            }
+        })
+    }
+
+    useEffect(() => {
+        const interval = setInterval(getCurrentSong, 1000);
+
+        return () => {
+            clearInterval(interval);
+          };
+    }, []);
 
     useEffect(() => {
         getRoomData();
@@ -105,32 +146,18 @@ export default function Room(props) {
     } 
     return (
         <Grid container spacing={1} flexDirection={"column"} alignItems={"center"}>
-            <Grid xs={12} alignItems="center">
-                <Typography variant="h3" component="h3">
+            <Grid size={{xs: 12}} alignItems="center">
+                <Typography fontWeight="bold" color="#fff" variant="h3" component="h3">
                     Code: {roomCode}
                 </Typography>
             </Grid> 
-            <Grid xs={12} alignItems="center">
-                <Typography variant="h6" component="h6">
-                    Votes: {roomData.votes_to_skip}
-                </Typography>
-            </Grid> 
-            <Grid xs={12} alignItems="center">
-                <Typography variant="h6" component="h6">
-                    Guest Can Pause: {roomData.guest_can_pause.toString()}
-                </Typography>
-            </Grid> 
-            <Grid xs={12} alignItems="center">
-                <Typography variant="h6" component="h6">
-                    Host: {isHost.toString()}
-                </Typography>              
-            </Grid>
+            <MusicPlayer {...song}/>
             {isHost ? renderSettingsButton() : null}
-            <Grid xs={12} alignItems="center">
+            <Grid size={{xs: 12}} alignItems="center">
                 <Button variant="contained" color="secondary" component={Link} onClick={leaveRoom}>
                     Leave Room
                 </Button>              
-            </Grid>  
+            </Grid>
         </Grid>
     )
 }

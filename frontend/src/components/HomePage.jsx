@@ -30,12 +30,12 @@ export default function HomePage() {
         if (roomCode == null) {
             return (
                 <Grid container spacing={3} justifyContent="center" flexDirection={"column"}>
-                    <Grid xs={12} alignItems="center">
+                    <Grid size={{xs: 12}} alignItems="center">
                         <Typography variant="h3" component="h3">
                             House Party
                         </Typography>
                     </Grid>
-                    <Grid xs={12} alignItems={"center"}>
+                    <Grid size={{xs: 12}} alignItems={"center"}>
                         <ButtonGroup disableElevation variant="contained" color="primary">
                             <Button color="primary" to="/room/join/" component={ Link }>
                                 Join a Room

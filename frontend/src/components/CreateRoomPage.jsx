@@ -39,7 +39,7 @@ export default function CreateRoomPage({
 
     function renderCreateButtons() {
         return (
-            <>
+            <Grid container flexDirection="row">
                 <Grid size={{ xs: 12 }} align="center">
                     <Button color="primary" variant="contained" onClick={handleCreateRoomButton}>
                         Create A Room
@@ -50,16 +50,16 @@ export default function CreateRoomPage({
                         Back
                     </Button>
                 </Grid>
-            </>
+            </Grid>
         )
     }
 
     function renderUpdateButtons() {
         return (
             <>
-                <Grid size={{ xs: 12 }} align="center">
+                <Grid size={{ xs: 12 }} align="center"> 
                         <Button color="primary" variant="contained" onClick={handleUpdateRoomButton}>
-                            Update A Room
+                            Update
                         </Button>
                 </Grid>
             </>
@@ -104,32 +104,43 @@ export default function CreateRoomPage({
             updateCallback();
         })
         .catch((error) => {
-            setMessage("Room updating error:", error);
+            setErrMessage("Room updating error");
         });
     }
 
-    const title = update ? "Update Room" : "Create a Room"
+    function checkMessage() {
+        if (message == "Room updated successfully!") {
+            return (<Alert severity="success" onClose={() => setMessage("")}>{message}</Alert>)
+        }
+
+        if (errMessage.includes("Room updating error:")) {
+            return (<Alert severity="error" onClose={() => setErrMessage("")}>{errMessage}</Alert>)
+        }
+    }
+
+    const title = update ? "Update a Room" : "Create a Room"
 
     return (
         <>
             <Grid container spacing={1} justifyContent="center">
-                <Grid xs={12} alignItems="center" >
+                <Grid xs={12} alignItems="center">
                     <Collapse in={message != "" || errMessage != ""}>
-                        {message != "" ? (
+                        {checkMessage()}
+                        {/* {message == "Room updated successfully!" && !message.includes("Room updating error:") ? (
                             <Alert severity="success" onClose={() => setMessage("")}>{message}</Alert>
                         ) : (
                             <Alert severity="error" onClose={() => setErrMessage("")}>{errMessage}</Alert>
-                        )}
+                        )} */}
                     </Collapse>
                 </Grid>
                 <Grid size={{ xs: 12 }} align="center">
-                    <Typography component="h4" variant="h4">
+                    <Typography fontWeight="bold" color="#fff" component="h4" variant="h4">
                         { title }
                     </Typography>
                 </Grid>
                 <Grid size={{ xs: 12 }} align="center">
                     <FormControl component="fieldset">
-                        <FormHelperText>
+                        <FormHelperText sx={{color: "rgba(255, 255, 255, .7)"}}>
                             <div align="center">
                                 Guest Control Of Playback State
                             </div>
@@ -137,15 +148,25 @@ export default function CreateRoomPage({
                         <RadioGroup row defaultValue={true} onChange={handleGuestCanPauseChange}>
                             <FormControlLabel
                                 value={true}
-                                control={<Radio color="primary" />}
+                                control={<Radio color="primary" sx={{color: "#fff"}}/>}
                                 label="Play/Pause"
                                 labelPlacement="bottom"
+                                sx={{
+                                    "& .MuiFormControlLabel-label": {
+                                        color: "#fff"
+                                    }
+                                }}
                             />
                             <FormControlLabel
                                 value={false}
-                                control={<Radio color="secondary" />}
+                                control={<Radio color="primary" sx={{color: "#fff"}}/>}
                                 label="No Control"
                                 labelPlacement="bottom"
+                                sx={{
+                                    "& .MuiFormControlLabel-label": {
+                                        color: "#fff"
+                                    }
+                                }}
                             />
                         </RadioGroup>
                     </FormControl>
@@ -160,19 +181,20 @@ export default function CreateRoomPage({
                             slotProps={{
                                 htmlInput: {
                                     min: 1,
-                                    style: { "textAlign": "center" },
+                                    style: { "textAlign": "center", "color": "#fff"},
                                 } 
                             }}
+                            focused 
                         />
-                        <FormHelperText>
+                        <FormHelperText sx={{color: "rgba(255, 255, 255, .7)"}}>
                             <div align="center">
                                 Votes Required To Skip Song
                             </div>
                         </FormHelperText>
                     </FormControl>
                 </Grid>
-                {update ? renderUpdateButtons() : renderCreateButtons()}
             </Grid>
+            {update ? renderUpdateButtons() : renderCreateButtons()}
         </>
     );
 }
