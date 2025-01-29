@@ -9,7 +9,6 @@ import { PlayArrow, SkipNext, Pause } from "@mui/icons-material"
 import CircularProgress from '@mui/material/CircularProgress';
 import "axios"
 import axios from "axios";
-import { width } from "@mui/system";
 
 export default function MusicPlayer(props) {
     const songProgress = (props.time / props.duration) * 100;
@@ -20,42 +19,54 @@ export default function MusicPlayer(props) {
         axios.put("http://127.0.0.1:8000/spotify/pause/")
         .then((response) => {
             if (response.status == 204) {
-                setMessage(<a href="https://spotify.com/premium/">Premium</a>)
-                setDisabled(true);
             }
         })
+        .catch((err) => {
+            setMessage(
+                <>
+                  You cannot pause/resume/skip songs without a <a href="https://www.spotify.com/premium" target="_blank" rel="noopener noreferrer">Spotify Premium</a>.
+                </>
+              );
+            setDisabled(true);
+        });
     }
 
     function playSong() {
         axios.put("http://127.0.0.1:8000/spotify/play/")
-        .then((response) => {
-            if (response.status == 204) {
-                setMessage(<a href="https://spotify.com/premium">Premium</a>)
-                setDisabled(true);
-            }
-        })
+        .catch((err) => {
+            setMessage(
+                <>
+                  You cannot pause/resume/skip songs without a <a href="https://www.spotify.com/premium" target="_blank" rel="noopener noreferrer">Spotify Premium</a>.
+                </>
+              );
+            setDisabled(true);
+        });
     }
 
     function skipSong() {
         axios.post("http://127.0.0.1:8000/spotify/skip/")
-        .then((response) => {
-            if (response.status == 204) {
-                setMessage(<a href="https://spotify.com/premium">Premium</a>)
-                setDisabled(true);
-            }
-        })
+        .catch((err) => {
+            setMessage(
+                <>
+                  You cannot pause/resume/skip songs without a <a href="https://www.spotify.com/premium" target="_blank" rel="noopener noreferrer">Spotify Premium</a>.
+                </>
+              );
+            setDisabled(true);
+        });
     }
 
     function renderMusicCard() {
         if (props.title) {
             return (
-                <Grid container display="flex" justifyContent="center">
-                {message != "" ? (
-                    <Alert severity="error" onClose={() => setMessage("")}>{message}</Alert>
-                ) : (
-                    null
-                )}
+            <Grid container display="flex" justifyContent="center">
                 <Grid container size={10} flexDirection="column" alignContent="center">
+                    {message != "" ? (
+                        <Grid>
+                            <Alert severity="error" onClose={() => setMessage("")}>{message}</Alert>
+                        </Grid>
+                    ) : (
+                        null
+                    )}
                     <Grid display={"flex"}  justifyContent="center" >
                         <img src={props.image_url} width="100%" />
                     </Grid>

@@ -31,8 +31,8 @@ export default function HomePage() {
             return (
                 <Grid container spacing={3} justifyContent="center" flexDirection={"column"}>
                     <Grid size={{xs: 12}} alignItems="center">
-                        <Typography variant="h3" component="h3">
-                            House Party
+                        <Typography variant="h3" component="h3" color="#fff" fontWeight="bold">
+                            Music Party
                         </Typography>
                     </Grid>
                     <Grid size={{xs: 12}} alignItems={"center"}>

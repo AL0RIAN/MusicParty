@@ -38,7 +38,7 @@ export default function RoomJoinPage(props) {
     return (
         <Grid container spacing={1} flexDirection={"column"} alignItems={"center"}>
             <Grid size={{xs: 12}}>
-                <Typography variant="h4" component="h4">
+                <Typography variant="h4" component="h4" color="#fff" fontWeight="bold">
                     Join a Room
                 </Typography>
             </Grid>
@@ -51,6 +51,14 @@ export default function RoomJoinPage(props) {
                     helperText={error}
                     variant="outlined"
                     onChange={handleTextFieldChange}
+                    sx={{
+                        "& .MuiInputLabel-root": {
+                            color: "#fff"
+                        },
+                        "& .MuiInputBase-input": {
+                            color: "#fff"
+                        }
+                    }}
                 />
             </Grid>
             <Grid size={{xs: 12}}>

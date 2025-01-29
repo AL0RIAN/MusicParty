@@ -145,15 +145,15 @@ export default function Room(props) {
         return renderSettings();
     } 
     return (
-        <Grid container spacing={1} flexDirection={"column"} alignItems={"center"}>
-            <Grid size={{xs: 12}} alignItems="center">
+        <Grid container spacing={1} display="flex" flexDirection="column" alignItems="center">
+            <Grid>
                 <Typography fontWeight="bold" color="#fff" variant="h3" component="h3">
                     Code: {roomCode}
                 </Typography>
             </Grid> 
             <MusicPlayer {...song}/>
             {isHost ? renderSettingsButton() : null}
-            <Grid size={{xs: 12}} alignItems="center">
+            <Grid size={{xs: 12}} display="flex" justifyContent="center">
                 <Button variant="contained" color="secondary" component={Link} onClick={leaveRoom}>
                     Leave Room
                 </Button>              

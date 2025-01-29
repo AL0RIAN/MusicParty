@@ -69,10 +69,12 @@ def execute_spotify_api_request(session_id, endpoint='', post_=False, put_=False
     }
     
     if post_:
-        post(BASE_URL + endpoint, headers=headers)
+        response = post(BASE_URL + endpoint, headers=headers)
+        return response
     if put_:
         response = put(BASE_URL + endpoint, headers=headers)
-    
+        return response
+        
     response = get(BASE_URL + endpoint, headers=headers)
     
     if response.status_code == 204:
